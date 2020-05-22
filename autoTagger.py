@@ -1,6 +1,4 @@
-"""This script runs to go to facebook in a Safari browser.
-Then it enters a fake email and password and clicks enter
-"""
+
 # imports
 import selenium
 from selenium import webdriver
@@ -15,27 +13,28 @@ email = input("What's your email?")
 pw = input("What's your password?")
 date = input("Enter date in MM/DD/YYYY format:")
 
-
 # initial setup of browser
 browser = webdriver.Safari()
 browser.maximize_window()
-browser.get_window_size()
-print(browser.get_window_size())
 
 browser.get("https://bacon.signs.com/CustomerServicePortal/CustomerSegmentationIndex")
 
-time.sleep(2)
+time.sleep(1.5)
 
 login_button = browser.find_elements_by_id("Google")
 login_button.pop()
 button = login_button.pop()
-print(button.location)
 button.send_keys(Keys.ENTER)
 
 
-time.sleep(2.8)
+time.sleep(2.4)
+
 # input the input
-email_box = browser.find_element_by_class_name("whsOnd").send_keys(email + Keys.ENTER)
+try:
+    email_box = browser.find_element_by_class_name("whsOnd").send_keys(email + Keys.ENTER)
+except selenium.common.exceptions.NoSuchElementException:
+    time.sleep(1)
+    email_box = browser.find_element_by_class_name("whsOnd").send_keys(email + Keys.ENTER)
 
 time.sleep(2)
 # pw
@@ -53,55 +52,87 @@ time.sleep(1)
 browser.find_element_by_id("custSegDateSubmit").send_keys(Keys.ENTER)
 
 time.sleep(5)
-
+browser.set_window_size(5000,5000)
 
 # get max pages
-maxPages = browser.find_element_by_class_name("pagination").get_attribute("data-pagecount")
+maxPages = int(browser.find_element_by_class_name("pagination").get_attribute("data-pagecount"))
 currPage = 1
 
-
-# drop-down fill-ins
-list = browser.find_elements_by_class_name("ddl-customerSegmentation-agent")
-agents = []
-while list:
-    agents.append(list.pop())
-
-
-#Create the object for Action Chains
-actions = ActionChains(browser)
-scroll = 0
-count = 0
-past_loc = 0
-curr_loc = 0
+# bug counter
 bugs = 0
 
-while agents:
-    count += 1
-    agent = agents.pop()
 
-    curr_loc = agent.location.get('y')
-    scroll += curr_loc - past_loc
-    if count > 6:
-        browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-    else:
-        browser.execute_script("window.scrollTo(0,scroll)")
+while currPage <= maxPages:
 
-    agent.send_keys(Keys.ENTER)
-    select = Select(agent)
+    # drop-down fill-ins
+    list = browser.find_elements_by_class_name("ddl-customerSegmentation-agent")
+    agents = []
+    while list:
+        agents.append(list.pop())
 
-    for option in select.options:
-        if option.text == email:
-        #try-catch block for weird exceptions
-            try:
-                select.select_by_visible_text(email)
-            except selenium.common.exceptions.ElementNotInteractableException:
-                print("bug detected")
-                bugs += 1
-            break
-    past_loc = agent.location.get('y')
 
-currPage += 1
-# next page click
-next = browser.find_element_by_link_text(str(currPage))
-browser.execute_script("arguments[0].click();", next)
+    #Create the object for Action Chains
+    actions = ActionChains(browser)
+    scroll = 0
+    count = 0
+    past_loc = 0
+    curr_loc = 0
+
+    while agents:
+        count += 1
+        agent = agents.pop()
+        try:
+            curr_loc = agent.location.get('y')
+            select = Select(agent)
+            current = select.first_selected_option.text
+            if current == "unassigned":
+                agent.send_keys(Keys.ENTER)
+            else:
+                continue
+        except selenium.common.exceptions.ElementNotInteractableException:
+            continue
+        except selenium.common.exceptions.NoSuchElementException:
+            time.sleep(1.25)
+            curr_loc = agent.location.get('y')
+            select = Select(agent)
+            current = select.first_selected_option.text
+            if current == "unassigned":
+                agent.send_keys(Keys.ENTER)
+            else:
+                continue
+
+        scroll += curr_loc - past_loc
+
+        if count > 6:
+            browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+        else:
+            browser.execute_script("window.scrollTo(0,scroll)")
+
+        for option in select.options:
+            if option.text == email:
+            # try-catch block for weird exceptions
+                try:
+                    select.select_by_visible_text(email)
+                    break
+                except:
+                    print("bug detected")
+                    bugs += 1
+                    continue
+
+        try:
+            past_loc = agent.location.get('y')
+        except selenium.common.exceptions.ElementNotInteractableException or selenium.common.exceptions.WebDriverException:
+            continue
+
+
+    currPage += 1
+
+    if currPage <= maxPages:
+        # next page click
+        next = browser.find_element_by_link_text(str(currPage))
+        browser.execute_script("arguments[0].click();", next)
+        browser.execute_script("window.scrollTo(0,0)")
+        time.sleep(1.5)
+
+print("Done! Caught " + str(bugs) + " bugs.")
 
