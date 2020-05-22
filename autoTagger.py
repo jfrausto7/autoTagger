@@ -13,9 +13,13 @@ email = input("What's your email?")
 pw = input("What's your password?")
 date = input("Enter date in MM/DD/YYYY format:")
 
+# notify user that program is running
+print("Running...")
+
 # initial setup of browser
 browser = webdriver.Safari()
 browser.maximize_window()
+browser.set_window_position(2000,2000)
 
 browser.get("https://bacon.signs.com/CustomerServicePortal/CustomerSegmentationIndex")
 
@@ -126,7 +130,6 @@ while currPage <= maxPages:
 
 
     currPage += 1
-
     if currPage <= maxPages:
         # next page click
         next = browser.find_element_by_link_text(str(currPage))
