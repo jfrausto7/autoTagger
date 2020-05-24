@@ -103,14 +103,16 @@ def autoTag(bugs):
             except selenium.common.exceptions.ElementNotInteractableException:
                 continue
             except selenium.common.exceptions.NoSuchElementException:
-                time.sleep(.7)
+                time.sleep(3)
                 curr_loc = agent.location.get('y')
                 select = Select(agent)
                 current = select.first_selected_option.text
-                if current == "unassigned":
-                    agent.send_keys(Keys.ENTER)
-                else:
-                    continue
+            except selenium.common.exceptions.StaleElementReferenceException:
+                time.sleep(3)
+                curr_loc = agent.location.get('y')
+                select = Select(agent)
+                current = select.first_selected_option.text
+
 
             scroll += curr_loc - past_loc
 
