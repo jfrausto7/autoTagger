@@ -58,7 +58,9 @@ def loginPhase():
 
     time.sleep(2)  # slight waiting period
     # pw
-    pw_box = browser.find_element_by_name("password").send_keys(pw + Keys.ENTER)
+    wait = WebDriverWait(browser, 10)
+    pw_box = wait.until(EC.presence_of_element_located((By.NAME, "password")))
+    pw_box.send_keys(pw + Keys.ENTER)
 
 def getPage():
     # go to date
