@@ -119,17 +119,32 @@ def autoTag(bugs):
             else:
                 browser.execute_script("window.scrollTo(0,scroll)")
 
-            for option in select.options:
-                if option.text == email:
-                    if current == "unassigned":     # only assigns agents to ones not previously assigned to!
-                        # try-catch block for weird exceptions
-                        try:
-                            select.select_by_visible_text(email)
-                            break
-                        except:
-                            print("bug detected")
-                            bugs += 1
-                            continue
+            try:
+                for option in select.options:
+                    if option.text == email:
+                        if current == "unassigned":     # only assigns agents to ones not previously assigned to!
+                            # try-catch block for weird exceptions
+                            try:
+                                select.select_by_visible_text(email)
+                                break
+                            except:
+                                print("bug detected")
+                                bugs += 1
+                                continue
+            except:
+                time.sleep(1.25)
+                for option in select.options:
+                    if option.text == email:
+                        if current == "unassigned":     # only assigns agents to ones not previously assigned to!
+                            # try-catch block for weird exceptions
+                            try:
+                                select.select_by_visible_text(email)
+                                break
+                            except:
+                                print("bug detected")
+                                bugs += 1
+                                continue
+
 
             try:
                 past_loc = agent.location.get('y')
