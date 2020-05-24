@@ -102,7 +102,7 @@ def autoTag(bugs):
     while currPage <= maxPages:
 
         # print current page to terminal
-        print("Filling tags for page " + str(currPage) + ".")
+        print("Filling tags for page " + str(currPage) + "...")
 
         # Setup new page attributes
         scroll = 0
