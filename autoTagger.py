@@ -1,5 +1,8 @@
 
 # imports
+import os
+import sys
+
 import selenium
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
@@ -155,7 +158,14 @@ date = input[2]
 print("Running...")
 
 # initial setup of browser
-browser = webdriver.Chrome("./driver/chromedriver")
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
+
+browser = webdriver.Chrome(resource_path('./driver/chromedriver'))
 browser.maximize_window()
 # browser.set_window_position(2000,2000)
 

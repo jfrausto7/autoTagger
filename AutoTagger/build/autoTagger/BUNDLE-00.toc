@@ -1,0 +1,3 @@
+([('autoTagger',
+   '/Users/frausto/Documents/GitHub/autoTagger/dist/autoTagger',
+   'EXECUTABLE')],)
