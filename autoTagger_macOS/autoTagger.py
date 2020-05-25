@@ -1,4 +1,3 @@
-
 # imports
 import os
 import sys
@@ -82,9 +81,6 @@ def getPage():
     browser.find_element_by_id("custSegDateSubmit").send_keys(Keys.ENTER)
 
     time.sleep(2.4)
-    browser.set_window_size(5000, 5000)
-    browser.set_window_position(2000, 2000)  # hides window
-
 
 
 def beginTags():
@@ -196,6 +192,8 @@ def resource_path(relative_path):
 browser = webdriver.Chrome(resource_path('./driver/chromedriver'))
 browser.maximize_window()
 browser.set_window_position(2000,2000)  # hides window
+browser.set_window_size(5000, 5000) # expands window for functionality
+browser.set_window_position(2000, 2000)  # hides window again
 
 # go to bacon website
 browser.get("https://bacon.signs.com/CustomerServicePortal/CustomerSegmentationIndex")
@@ -205,7 +203,7 @@ time.sleep(.5)  # slight waiting period
 
 loginPhase()
 
-time.sleep(7)   # slight waiting period
+time.sleep(6.5)   # slight waiting period
 
 getPage()
 
