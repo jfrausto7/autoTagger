@@ -128,7 +128,6 @@ def autoTag(bugs):
             except:
                 time.sleep(1.5)
                 agents = beginTags()
-                print("reset tags")
                 continue
 
 
@@ -155,7 +154,6 @@ def autoTag(bugs):
             except:
                 time.sleep(1.5)
                 agents = beginTags()
-                print("reset tags")
                 continue
 
 
@@ -164,7 +162,6 @@ def autoTag(bugs):
             except:
                 time.sleep(1.5)
                 agents = beginTags()
-                print("reset tags")
                 continue
 
         currPage += 1
