@@ -1,0 +1,1 @@
+pyinstaller -c -F -i "at_icon.ico" --add-binary "C:\Users\virtu\Downloads\autoTagger\autoTagger_windows\driver\chromedriver.exe;\driver" autoTagger.py
