@@ -52,14 +52,17 @@ def loginPhase():
     try:
         email_box = browser.find_element_by_class_name("whsOnd").send_keys(email + Keys.ENTER)
     except selenium.common.exceptions.NoSuchElementException:
-        wait = WebDriverWait(browser, 10)
-        email_box = wait.until(EC.presence_of_element_located((By.CLASS_NAME, "whsOnd")))
+        time.sleep(2)
+        email_box = browser.find_element_by_class_name("whsOnd")
         email_box.send_keys(email + Keys.ENTER)
 
     time.sleep(2)  # slight waiting period
     # pw
-    wait = WebDriverWait(browser, 10)
-    pw_box = wait.until(EC.presence_of_element_located((By.NAME, "password")))
+    try:
+        pw_box = browser.find_element_by_name("password")
+    except:
+        time.sleep(1)
+        pw_box = browser.find_element_by_name("password")
     pw_box.send_keys(pw + Keys.ENTER)
 
 def getPage():
@@ -124,7 +127,8 @@ def autoTag(bugs):
                 current = select.first_selected_option.text
             except:
                 time.sleep(1.5)
-                beginTags()
+                agents = beginTags()
+                print("reset tags")
                 continue
 
 
@@ -150,7 +154,8 @@ def autoTag(bugs):
                                 continue
             except:
                 time.sleep(1.5)
-                beginTags()
+                agents = beginTags()
+                print("reset tags")
                 continue
 
 
@@ -158,7 +163,8 @@ def autoTag(bugs):
                 past_loc = agent.location.get('y')
             except:
                 time.sleep(1.5)
-                beginTags()
+                agents = beginTags()
+                print("reset tags")
                 continue
 
         currPage += 1

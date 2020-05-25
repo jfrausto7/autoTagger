@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['autoTagger.py'],
-             pathex=['/Users/frausto/Documents/GitHub/autoTagger'],
+             pathex=['/Users/frausto/Documents/GitHub/autoTagger/autoTagger_macOS'],
              binaries=[('./driver/chromedriver', './driver')],
              datas=[],
              hiddenimports=[],
